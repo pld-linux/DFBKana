@@ -1,0 +1,112 @@
+--- DFBKana-0.3/src/dfbkana.c.orig	2002-04-22 16:57:20.000000000 +0200
++++ DFBKana-0.3/src/dfbkana.c	2005-03-05 01:30:28.781401280 +0100
+@@ -17,9 +17,10 @@
+  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111307, USA.
+  */
+ 
+-#include <directfb.h>
+ #include "config.h"
+ 
++#include <directfb.h>
++
+ #include "dfbkana.h"
+ #include "infowindow.h"
+ #include "gridwindow.h"
+@@ -38,7 +39,7 @@
+ int xres,yres,fontheight;
+ 
+ #ifdef DEFAULT_JAPANESE_FONT
+-char *japanese_fontname = JAPANESE_FONT;
++char *japanese_fontname = DEFAULT_JAPANESE_FONT;
+ #else
+ char *japanese_fontname = NULL;
+ #endif
+@@ -171,7 +172,7 @@
+      DFBCHECK(DirectFBCreate( &dfb ));
+ 
+      /* create an input buffer for key events */
+-     DFBCHECK(dfb->CreateEventBuffer( dfb, DICAPS_KEYS, &keybuffer ));
++     DFBCHECK(dfb->CreateInputEventBuffer( dfb, DICAPS_KEYS, DFB_TRUE, &keybuffer ));
+ 
+      DFBCHECK(dfb->GetDisplayLayer( dfb, DLID_PRIMARY, &layer ));
+ 
+@@ -476,31 +477,31 @@
+ 
+           while (keybuffer->GetEvent( keybuffer, DFB_EVENT(&kevt) ) == DFB_OK) {
+                if (kevt.type == DIET_KEYPRESS)
+-                    switch (kevt.keycode) {
+-                    case DIKC_LEFT:
++                    switch (DFB_LOWER_CASE(kevt.key_symbol)) {
++                    case DIKS_CURSOR_LEFT:
+                          if (--kana_window_pos < -1)
+                               kana_window_pos = -1;
+                          kanawindow_moveto( kana_window_pos );
+                          break;
+-                    case DIKC_RIGHT:
++                    case DIKS_CURSOR_RIGHT:
+                          if (++kana_window_pos > 49)
+                               kana_window_pos = 49;
+                          kanawindow_moveto( kana_window_pos );
+                          break;
+-                    case DIKC_UP:
++                    case DIKS_CURSOR_UP:
+                          kana_window_pos-=5;
+                          if (kana_window_pos < -1)
+                               kana_window_pos = -1;
+                          kanawindow_moveto( kana_window_pos );
+                          break;
+-                    case DIKC_DOWN:
++                    case DIKS_CURSOR_DOWN:
+                          kana_window_pos+=5;
+                          if (kana_window_pos > 49)
+                               kana_window_pos = 49;
+                          kanawindow_moveto( kana_window_pos );
+                          break;
+-                    case DIKC_ENTER:
+-                    case DIKC_OK:
++                    case DIKS_ENTER:
++                    case DIKS_OK:
+                          if (kana_window_pos != -1) {
+                               solve_kana( kana_nr, kana_window_pos, kana_mode, 0 );
+                               kana_window_pos = -1;
+@@ -508,8 +509,8 @@
+                               kanawindow_update( kana_nr, kana_mode );
+                          }
+                          break;
+-                    case DIKC_R:
+-                    case DIKC_2:                    
++                    case 'r':
++		    case '2':                    
+                          grid_display_mode = !grid_display_mode;
+                          gridwindow_setdisplaymode( grid_display_mode );
+                          gridwindow_redraw( kana_mode );
+@@ -517,8 +518,8 @@
+                                           "romanji off" : "romanji on",
+                                           500 );                         
+                          break;
+-                    case DIKC_1:
+-                    case DIKC_Q:
++                    case '1':
++                    case 'q':
+                          kana_mode = !kana_mode;
+                          if (grid_display_mode)
+                               gridwindow_redraw( kana_mode );
+@@ -527,15 +528,15 @@
+                                           katakanastring : hiraganastring,
+                                           500 );
+                          break;
+-                    case DIKC_B:
+-                    case DIKC_3:
++                    case 'b':
++                    case '3':
+                          background_mode = !background_mode;
+                          if (background_mode)
+                               layer->SetBackgroundMode( layer, DLBM_IMAGE );
+                          else
+                               layer->SetBackgroundMode( layer, DLBM_COLOR );
+                          break;
+-                    case DIKC_ESCAPE:
++                    case DIKS_ESCAPE:
+                          quit =1;
+                     default:
+                          break;
