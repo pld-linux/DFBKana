@@ -1,5 +1,5 @@
 Summary:	DFBKana - learning Japanese kana
-Summary(pl.UTF-8):   DFBKana - program do nauki alfabetu japońskiego kana
+Summary(pl.UTF-8):	DFBKana - program do nauki alfabetu japońskiego kana
 Name:		DFBKana
 Version:	0.3
 Release:	1
