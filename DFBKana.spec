@@ -1,5 +1,5 @@
 Summary:	DFBKana - learning Japanese kana
-Summary(pl):	DFBKana - program do nauki alfabetu japoñskiego kana
+Summary(pl.UTF-8):   DFBKana - program do nauki alfabetu japoÅ„skiego kana
 Name:		DFBKana
 Version:	0.3
 Release:	1
@@ -18,8 +18,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 DFBKana is a small DirectFB program to help you learning Japanese kana
 (hiragana and katakana).
 
-%description -l pl
-DFBKana to ma³y program dla DirectFB pomagaj±cy w nauce japoñskiego
+%description -l pl.UTF-8
+DFBKana to maÅ‚y program dla DirectFB pomagajÄ…cy w nauce japoÅ„skiego
 alfabetu kana (hiragana i katakana).
 
 %prep
